@@ -15,6 +15,7 @@
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
+   Node_T oNChild;
    Path_T oPNPath;
    Path_T oPPPath;
 
@@ -35,6 +36,20 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          Path_getDepth(oPNPath) - 1) {
          fprintf(stderr, "P-C nodes don't have P-C paths: (%s) (%s)\n",
                  Path_getPathname(oPPPath), Path_getPathname(oPNPath));
+         return FALSE;
+      }
+
+   }
+
+   oNChild = Node_getChild(oNNode);
+   if(oNChild != NULL) {
+      oPNPath = Node_getPath(oNNode);
+      oPCPath = Node_getPath(oNChild);
+
+      if(Path_getSharedPrefixDepth(oPNPath, oPCPath) !=
+         Path_getDepth(oPNPath) + 1) {
+         fprintf(stderr, "N-C nodes don't have N-C paths: (%s) (%s)\n",
+                 Path_getPathname(oPNPath), Path_getPathname(oPCPath));
          return FALSE;
       }
    }
@@ -72,6 +87,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
             return FALSE;
          }
 
+         if(Node_compare(Node_T ulIndex, Node_T (ulIndex + 1)) == <0) {
+            fprintf(stderr, "children must be in lexicographical order");
+            return false;
+         }
+
          if(Node_compare(Node_T ulIndex, Node_T (ulIndex + 1)) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return false;
@@ -84,18 +104,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
       }
    }
    return TRUE;
-}
-
-/*extra, created by me*/
-static size_t CheckerDT_lengthCheck(Node_T oNNode) {
-   size_t ulIndex;
-   size_t *counter;
-   if(oNNode!= NULL) {
-      for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++){
-         Node_T oNChild = NULL;
-         Node_getChild(oNNode, ulIndex, &oNChild);
-      }
-   return ulIndex; }
 }
 
 /* see checkerDT.h for specification */
@@ -116,7 +124,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    }
 
    
-   /*New test to find what is wrong with dtBad2*/
+   /*Checks if ulCount is valid*/
    if (ulCount != *counter){
       fprintf(stderr, "Total node count can't be less than the 
          number of nodes in the tree");}
