@@ -81,6 +81,15 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
    return TRUE;
 }
 
+/*extra, created by me*/
+static size_t CheckerDT_lengthCheck(Node_T oNNode) {
+   size_t ulIndex;
+
+   if(oNNode!= NULL) {
+      for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
+   return ulIndex; }
+}
+
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
@@ -90,9 +99,13 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    if(!bIsInitialized)
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
-         return FALSE;
-      }
+         return FALSE;}
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot);
+   
+   /*New test to find what is wrong with dtBad2*/
+   if (ulCount < CheckerDT_lengthCheck(oNRoot)){
+      fprintf(stderr, "Total node count can't be less than the number of nodes in the tree");}
+
 }
