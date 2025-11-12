@@ -136,6 +136,7 @@ int main(void) {
   free(temp);
   assert(BDT_insert("a/x") == SUCCESS);
   assert((temp = BDT_toString()) != NULL);
+  fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
   assert(!strcmp(temp,"a\na/y\na/x\n"));
   free(temp);
   assert(BDT_rm("a/y") == SUCCESS);
@@ -145,7 +146,7 @@ int main(void) {
   assert(BDT_insert("a/y2") == SUCCESS);
   assert((temp = BDT_toString()) != NULL);
   assert(!strcmp(temp,"a\na/x\na/y2\n"));
-  free(temp);
+  free(temp);  
   assert(BDT_rm("a/y2") == SUCCESS);
   assert((temp = BDT_toString()) != NULL);
   assert(!strcmp(temp,"a\na/x\n"));
