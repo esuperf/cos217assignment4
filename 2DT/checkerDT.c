@@ -72,6 +72,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
             return FALSE;
          }
 
+         if(Node_compare(Node_T ulIndex, Node_T (ulIndex + 1)) == 0) {
+            fprintf(stderr, "children can't have the same name!!");
+            return false;
+         }
+
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
          if(!CheckerDT_treeCheck(oNChild))
