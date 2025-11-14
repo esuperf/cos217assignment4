@@ -114,12 +114,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
       
 
-         // checking if there are any duplicate paths
+         /* checking if there are any duplicate paths
          // Path_T comparedPath = Node_getPath(oNChild);
          // if(Path_comparePath(comparedPath, checkedPath) == 0){
          //    fprintf(stderr, "this path already exists!!!")
          //    return FALSE;
-         // }
+         */ }
 
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
@@ -130,24 +130,22 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
          fprintf(stderr, "testing");
-         if(Path_comparePath(Node_getPath(child1Ptr),
-          Node_getPath(child2Ptr)) > 0) {
+         if(Path_comparePath(Node_getPath(*child1Ptr),
+          Node_getPath(*child2Ptr)) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return FALSE;
          }
-         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) == 0) {
+         if(Path_comparePath(*child1Ptr->opPath, *child2Ptr->opPath) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return FALSE;
          }
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(oNChild))
+         if(!CheckerDT_treeCheck(oNChild, counter))
             return FALSE;
       }
 
-
-   }
    return TRUE;
 }
 
@@ -180,16 +178,17 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    
    /*Checks if ulCount is valid*/
    if (ulCount != counter) {
-      fprintf(stderr, "Total node count can't be less than the 
-         number of nodes in the tree\n");
+      fprintf(stderr, "Total node count can't be less than the number of nodes in the tree\n");
+      return FALSE;
    }
 
    if (DT_contains(oNRoot->oPPath) == FALSE) {
       fprinf(stderr, "DT_contains is broken");
+      return FALSE;
    }
 
 
-   // for (i = 0; i < ulCount; i--){
+   /* for (i = 0; i < ulCount; i--){
    //    child1 = Node_getChild(oNNode, i, child1Ptr);
    //    child2 = Node_getChild(oNNode, i+1, child2Ptr);
    //       if(Path_comparePath(Node_getPath(child1Ptr)),
@@ -206,5 +205,5 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
    //    fprintf(stderr, "Issue with Dynarray creation");
    //    return FALSE;
-   //}
+   */
 }
