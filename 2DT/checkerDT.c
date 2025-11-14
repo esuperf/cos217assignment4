@@ -47,6 +47,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    }
 
+   /*same for child?*/
    oNChild = Node_getChild(oNNode);
    if(oNChild != NULL) {
       oPNPath = Node_getPath(oNNode);
@@ -58,6 +59,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
                  Path_getPathname(oPNPath), Path_getPathname(oPCPath));
          return FALSE;
       }
+   }
+
+   if(Path_compareString(Node_getPath(oNNode), oNNode->oPPath) == 0){
+      fprintf(stderr, "oPPath is not the absolute path")
+      return FALSE;
    }
 
    return TRUE;
@@ -107,12 +113,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
             return FALSE;
          }
          
-         child1 = Node_getChild(Node_T oNNode, ulIndex,
-                  Node_T *child1Ptr);
-         child2 = Node_getChild(Node_T oNNode, ulIndex + 1,
-                  Node_T *child2Ptr);
+         child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
+         child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
 
-         if(Node_compare(child1Ptr, child2Ptr) == <0) {
+         if(Node_compare(child1Ptr, child2Ptr) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
@@ -160,8 +164,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       fprintf(stderr, "Total node count can't be less than the 
          number of nodes in the tree");}
 
-   if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
-      fprintf(stderr, "Issue with Dynarray creation");
-      return FALSE;
-   }
+   // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
+   //    fprintf(stderr, "Issue with Dynarray creation");
+   //    return FALSE;
+   //}
 }
