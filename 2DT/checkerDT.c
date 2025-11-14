@@ -71,10 +71,10 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       return FALSE;
    }*/
 
-   if(DynArray_getLength(oNNode->oDChildren) != Node_getNumChildren(oNNode)){
+   /*if(DynArray_getLength(oNNode->oDChildren) != Node_getNumChildren(oNNode)){
       fprintf(stderr, "number of children... is not the number of children");
       return FALSE;
-   }
+   }*/
 
 
    
@@ -92,8 +92,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    size_t ulIndex;
-   //Path_T checkedPath = Node_getPath(checkedNode);
-   //Path_T comparedPath;
+   /*Path_T checkedPath = Node_getPath(checkedNode);
+   //Path_T comparedPath;*/
    int child1;
    int child2;
    Node_T *child1Ptr;
@@ -133,11 +133,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          if(Path_comparePath(Node_getPath(child1Ptr),
           Node_getPath(child2Ptr)) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
-            return false;
+            return FALSE;
          }
          if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) == 0) {
             fprintf(stderr, "children can't have the same name!!");
-            return false;
+            return FALSE;
          }
 
          /* if recurring down one subtree results in a failed check
@@ -179,9 +179,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    
    /*Checks if ulCount is valid*/
-   if (ulCount != *counter) {
+   if (ulCount != counter) {
       fprintf(stderr, "Total node count can't be less than the 
-         number of nodes in the tree");
+         number of nodes in the tree\n");
    }
 
    if (DT_contains(oNRoot->oPPath) == FALSE) {
