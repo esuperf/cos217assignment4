@@ -98,7 +98,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    int child2;*/
    Node_T *child1Ptr;
    Node_T *child2Ptr;
-   fprintf(stderr, "tree check is done");
+   fprintf(stderr, "tree check is done\n");
 
    if(oNNode!= NULL) {
       (*counter)++;
@@ -133,12 +133,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          fprintf(stderr, "testing");
          if(Path_comparePath(Node_getPath(*child1Ptr),
           Node_getPath(*child2Ptr)) > 0) {
-            fprintf(stderr, "children must be in lexicographical order");
+            fprintf(stderr, "children must be in lexicographical order\n");
             return FALSE;
          }
          if(Path_comparePath(Node_getPath(*child1Ptr),
           Node_getPath(*child2Ptr)) == 0) {
-            fprintf(stderr, "children can't have the same name!!");
+            fprintf(stderr, "children can't have the same name!!\n");
             return FALSE;
          }
 
@@ -155,7 +155,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
    size_t counter = 0;
-   fprintf(stderr, "is valid is done");
+   /*fprintf(stderr, "is valid is done\n");*/
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
