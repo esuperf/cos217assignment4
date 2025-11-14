@@ -96,8 +96,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    //Path_T comparedPath;*/
    /*int child1;
    int child2;*/
-   Node_T child1Ptr;
-   Node_T child2Ptr;
+   Node_T *child1Ptr;
+   Node_T *child2Ptr;
    fprintf(stderr, "tree check is done");
 
    if(oNNode!= NULL) {
