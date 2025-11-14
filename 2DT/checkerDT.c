@@ -147,9 +147,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          if(!CheckerDT_treeCheck(oNChild, counter))
             return FALSE;
       }
-
+   }
    return TRUE;
-}
 }
 
 /* see checkerDT.h for specification */
@@ -181,12 +180,13 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
    }
 
+   return TRUE;
    /*if (DT_contains(oNRoot->oPPath) == FALSE) {
       fprintf(stderr, "DT_contains is broken");
       return FALSE;
    }*/
 
-   // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
+   /* if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
    //    fprintf(stderr, "Issue with Dynarray creation");
    //    return FALSE;
    */
