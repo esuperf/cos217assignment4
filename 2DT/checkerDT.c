@@ -10,7 +10,13 @@
 #include "dynarray.h"
 #include "path.h"
 
-
+static int DynArray_isValid(DynArray_T oDynArray)
+   {
+   if (oDynArray->uPhysLength < MIN_PHYS_LENGTH) return 0;
+   if (oDynArray->uLength > oDynArray->uPhysLength) return 0;
+   if (oDynArray->ppvArray == NULL) return 0;
+   return 1;
+   }
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
@@ -66,8 +72,14 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    size_t ulIndex;
+   //Path_T checkedPath = Node_getPath(checkedNode);
+   //Path_T comparedPath;
+   Node_T child1;
+   Node_T child2;
+   Node_T *child1Ptr;
+   Node_T *child2Ptr;
 
    if(oNNode!= NULL) {
       counter++;
@@ -81,18 +93,31 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
       {
          Node_T oNChild = NULL;
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+      
+
+         // checking if there are any duplicate paths
+         // Path_T comparedPath = Node_getPath(oNChild);
+         // if(Path_comparePath(comparedPath, checkedPath) == 0){
+         //    fprintf(stderr, "this path already exists!!!")
+         //    return FALSE;
+         // }
 
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
             return FALSE;
          }
+         
+         child1 = Node_getChild(Node_T oNNode, ulIndex,
+                  Node_T *child1Ptr);
+         child2 = Node_getChild(Node_T oNNode, ulIndex + 1,
+                  Node_T *child2Ptr);
 
-         if(Node_compare(Node_T ulIndex, Node_T (ulIndex + 1)) == <0) {
+         if(Node_compare(child1Ptr, child2Ptr) == <0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
 
-         if(Node_compare(Node_T ulIndex, Node_T (ulIndex + 1)) == 0) {
+         if(Node_compare(child1Ptr, child2Ptr) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return false;
          }
@@ -102,6 +127,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter) {
          if(!CheckerDT_treeCheck(oNChild))
             return FALSE;
       }
+
+
    }
    return TRUE;
 }
@@ -113,13 +140,17 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
-   if(!bIsInitialized)
+   if(!bIsInitialized){
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;}
+      if(oNRoot != NULL){
+         fprintf(stderr, "Not inititialized, but root exists\n");
+      }
+      }
 
    /* Now checks invariants recursively at each node from the root. */
-   if (!CheckerDT_treeCheck(oNRoot)){
+   if (!CheckerDT_treeCheck(oNRoot, *counter)){
       return FALSE;
    }
 
@@ -129,4 +160,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       fprintf(stderr, "Total node count can't be less than the 
          number of nodes in the tree");}
 
+   if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
+      fprintf(stderr, "Issue with Dynarray creation");
+      return FALSE;
+   }
 }
