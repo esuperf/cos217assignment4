@@ -113,14 +113,13 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
             return FALSE;
          }
          
+         //child checks
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
-
          if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
-
          if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return false;
@@ -160,10 +159,16 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    
    /*Checks if ulCount is valid*/
-   if (ulCount != *counter){
+   if (ulCount != *counter) {
       fprintf(stderr, "Total node count can't be less than the 
-         number of nodes in the tree");}
+         number of nodes in the tree");
+   }
 
+   if (DT_contains(oNRoot->oPPath) == FALSE) {
+      fprinf(stderr, "DT_contains is broken");
+   }
+
+   
    // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
    //    fprintf(stderr, "Issue with Dynarray creation");
    //    return FALSE;
