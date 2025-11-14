@@ -10,13 +10,13 @@
 #include "dynarray.h"
 #include "path.h"
 
-static int DynArray_isValid(DynArray_T oDynArray)
-   {
-   if (oDynArray->uPhysLength < MIN_PHYS_LENGTH) return 0;
-   if (oDynArray->uLength > oDynArray->uPhysLength) return 0;
-   if (oDynArray->ppvArray == NULL) return 0;
-   return 1;
-   }
+// static int DynArray_isValid(DynArray_T oDynArray)
+//    {
+//    if (oDynArray->uPhysLength < MIN_PHYS_LENGTH) return 0;
+//    if (oDynArray->uLength > oDynArray->uPhysLength) return 0;
+//    if (oDynArray->ppvArray == NULL) return 0;
+//    return 1;
+//    }
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
@@ -66,6 +66,18 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       return FALSE;
    }
 
+   if(Path_comparePath(Node_getParent(oNNode)->oPPath, oNNode->oNParent->oPPath) != 0) {
+      fprintf(stderr, "issue with oNParent");
+      return false;
+   }
+
+   if(DynArray_getLength(oNNode->oDChildren) != Node_getNumChildren(oNNode)){
+      fprintf(stderr, "number of children... is not the number of children");
+      return false;
+   }
+
+
+   
    return TRUE;
 }
 
@@ -168,7 +180,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       fprinf(stderr, "DT_contains is broken");
    }
 
-   
+
    // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
    //    fprintf(stderr, "Issue with Dynarray creation");
    //    return FALSE;
