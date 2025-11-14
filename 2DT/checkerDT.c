@@ -94,8 +94,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    size_t ulIndex;
    /*Path_T checkedPath = Node_getPath(checkedNode);
    //Path_T comparedPath;*/
-   int child1;
-   int child2;
+   /*int child1;
+   int child2;*/
    Node_T *child1Ptr;
    Node_T *child2Ptr;
    fprintf(stderr, "tree check is done");
@@ -115,10 +115,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
       
 
          /* checking if there are any duplicate paths
-         // Path_T comparedPath = Node_getPath(oNChild);
-         // if(Path_comparePath(comparedPath, checkedPath) == 0){
-         //    fprintf(stderr, "this path already exists!!!")
-         //    return FALSE;
+         Path_T comparedPath = Node_getPath(oNChild);
+         if(Path_comparePath(comparedPath, checkedPath) == 0){
+             fprintf(stderr, "this path already exists!!!")
+             return FALSE;
           }*/
 
          if(iStatus != SUCCESS) {
@@ -127,15 +127,17 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          }
          
          //child checks
-         child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
-         child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
+         Node_getChild(oNNode, ulIndex, child1Ptr);
+         Node_getChild(oNNode, ulIndex + 1, child2Ptr);
+
          fprintf(stderr, "testing");
          if(Path_comparePath(Node_getPath(*child1Ptr),
           Node_getPath(*child2Ptr)) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return FALSE;
          }
-         if(Path_comparePath(*child1Ptr->opPath, *child2Ptr->opPath) == 0) {
+         if(Path_comparePath(Node_getPath(*child1Ptr),
+          Node_getPath(*child2Ptr)) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return FALSE;
          }
