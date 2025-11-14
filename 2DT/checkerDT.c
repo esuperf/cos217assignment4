@@ -21,7 +21,7 @@
  see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
-   Node_T oNChild;
+   /*Node_T oNChild;*/
    Path_T oPNPath;
    Path_T oPPPath;
 
@@ -61,20 +61,20 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }*/
 
-   /*if(Path_compareString(Node_getPath(oNNode), oNNode->oPPath) == 0){
+   if(Path_compareString(Node_getPath(oNNode), *oNNode->oPPath) == 0){
       fprintf(stderr, "oPPath is not the absolute path")
       return FALSE;
-   }*/
+   }
 
-   /*if(Path_comparePath(Node_getParent(oNNode)->oPPath, oNNode->oNParent->oPPath) != 0) {
+   if(Path_comparePath(Node_getParent(oNNode)->oPPath, *oNNode->oNParent->oPPath) != 0) {
       fprintf(stderr, "issue with oNParent");
       return FALSE;
-   }*/
+   }
 
-   /*if(DynArray_getLength(oNNode->oDChildren) != Node_getNumChildren(oNNode)){
+   if(DynArray_getLength(*oNNode->oDChildren) != Node_getNumChildren(oNNode)){
       fprintf(stderr, "number of children... is not the number of children");
       return FALSE;
-   }*/
+   }
 
 
    
@@ -182,8 +182,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
    }
 
-   if (DT_contains(oNRoot->oPPath) == FALSE) {
-      fprinf(stderr, "DT_contains is broken");
+   if (DT_contains(*oNRoot->oPPath) == FALSE) {
+      fprintf(stderr, "DT_contains is broken");
       return FALSE;
    }
 
