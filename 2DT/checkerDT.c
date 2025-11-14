@@ -128,7 +128,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          //child checks
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
-         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) > 0) {
+         if(Path_comparePath(Node_getPath(child1Ptr)),
+          Path_comparePath(child2Ptr) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
@@ -188,7 +189,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    for (i = ulCount; i > 0; i--){
       child1 = Node_getChild(oNNode, i, child1Ptr);
       child2 = Node_getChild(oNNode, i-1, child2Ptr);
-         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) < 0) {
+         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
