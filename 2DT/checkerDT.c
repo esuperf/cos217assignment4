@@ -128,7 +128,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          //child checks
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
-         printf(%s, %s, child1Ptr->oPPath->pcPath, child2Ptr->opPath->pcPath);
          if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
@@ -153,6 +152,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
    size_t *counter;
+   Node_T child1;
+   Node_T child2;
+   Node_T *child1Ptr;
+   Node_T *child2Ptr;
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
@@ -181,6 +184,19 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       fprinf(stderr, "DT_contains is broken");
    }
 
+
+   for (i = ulCount; i > 0; i--){
+      child1 = Node_getChild(oNNode, i, child1Ptr);
+      child2 = Node_getChild(oNNode, i-1, child2Ptr);
+         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) < 0) {
+            fprintf(stderr, "children must be in lexicographical order");
+            return false;
+         }
+         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) == 0) {
+            fprintf(stderr, "children can't have the same name!!");
+            return false;
+         } 
+   }
 
    // if(DynArray_isValid(DynArray_new(size_t uLength)) == 0){
    //    fprintf(stderr, "Issue with Dynarray creation");
