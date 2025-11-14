@@ -116,12 +116,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
 
-         if(Node_compare(child1Ptr, child2Ptr) > 0) {
+         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
             return false;
          }
 
-         if(Node_compare(child1Ptr, child2Ptr) == 0) {
+         if(Path_comparePath(child1Ptr->opPath, child2Ptr->opPath) == 0) {
             fprintf(stderr, "children can't have the same name!!");
             return false;
          }
