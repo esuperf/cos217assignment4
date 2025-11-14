@@ -10,7 +10,7 @@
 #include "dynarray.h"
 #include "path.h"
 
-// static int DynArray_isValid(DynArray_T oDynArray)
+/* static int DynArray_isValid(DynArray_T oDynArray)
 //    {
 //    if (oDynArray->uPhysLength < MIN_PHYS_LENGTH) return 0;
 //    if (oDynArray->uLength > oDynArray->uPhysLength) return 0;
@@ -18,7 +18,7 @@
 //    return 1;
 //    }
 
-/* see checkerDT.h for specification */
+ see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Node_T oNChild;
@@ -47,7 +47,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    }
 
-   /*same for child?*/
+   /*same for child?
    oNChild = Node_getChild(oNNode);
    if(oNChild != NULL) {
       oPNPath = Node_getPath(oNNode);
@@ -59,21 +59,21 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
                  Path_getPathname(oPNPath), Path_getPathname(oPCPath));
          return FALSE;
       }
-   }
+   }*/
 
-   if(Path_compareString(Node_getPath(oNNode), oNNode->oPPath) == 0){
+   /*if(Path_compareString(Node_getPath(oNNode), oNNode->oPPath) == 0){
       fprintf(stderr, "oPPath is not the absolute path")
       return FALSE;
-   }
+   }*/
 
-   if(Path_comparePath(Node_getParent(oNNode)->oPPath, oNNode->oNParent->oPPath) != 0) {
+   /*if(Path_comparePath(Node_getParent(oNNode)->oPPath, oNNode->oNParent->oPPath) != 0) {
       fprintf(stderr, "issue with oNParent");
-      return false;
-   }
+      return FALSE;
+   }*/
 
    if(DynArray_getLength(oNNode->oDChildren) != Node_getNumChildren(oNNode)){
       fprintf(stderr, "number of children... is not the number of children");
-      return false;
+      return FALSE;
    }
 
 
@@ -94,8 +94,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    size_t ulIndex;
    //Path_T checkedPath = Node_getPath(checkedNode);
    //Path_T comparedPath;
-   Node_T child1;
-   Node_T child2;
+   int child1;
+   int child2;
    Node_T *child1Ptr;
    Node_T *child2Ptr;
    fprintf(stderr, "tree check is done");
