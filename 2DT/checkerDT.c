@@ -128,6 +128,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          //child checks
          child1 = Node_getChild(oNNode, ulIndex, child1Ptr);
          child2 = Node_getChild(oNNode, ulIndex + 1, child2Ptr);
+         fprintf(stderr, "testing");
          if(Path_comparePath(Node_getPath(child1Ptr)),
           Path_comparePath(child2Ptr) > 0) {
             fprintf(stderr, "children must be in lexicographical order");
