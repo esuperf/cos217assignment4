@@ -61,8 +61,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }*/
 
-   if(Path_compareString(Node_getPath(oNNode), *oNNode->oPPath) == 0){
-      fprintf(stderr, "oPPath is not the absolute path")
+   /*if(Path_compareString(Node_getPath(oNNode), *oNNode->oPPath) == 0){
+      fprintf(stderr, "oPPath is not the absolute path");
       return FALSE;
    }
 
@@ -74,7 +74,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    if(DynArray_getLength(*oNNode->oDChildren) != Node_getNumChildren(oNNode)){
       fprintf(stderr, "number of children... is not the number of children");
       return FALSE;
-   }
+   }*/
 
 
    
@@ -119,7 +119,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          // if(Path_comparePath(comparedPath, checkedPath) == 0){
          //    fprintf(stderr, "this path already exists!!!")
          //    return FALSE;
-         */ }
+          }*/
 
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
@@ -147,6 +147,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
       }
 
    return TRUE;
+}
 }
 
 /* see checkerDT.h for specification */
@@ -182,7 +183,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
    }
 
-   if (DT_contains(*oNRoot->oPPath) == FALSE) {
+   if (DT_contains(oNRoot->oPPath) == FALSE) {
       fprintf(stderr, "DT_contains is broken");
       return FALSE;
    }
