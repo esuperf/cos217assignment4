@@ -96,8 +96,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
    //Path_T comparedPath;*/
    /*int child1;
    int child2;*/
-   Node_T *child1Ptr;
-   Node_T *child2Ptr;
+   Node_T child1Ptr;
+   Node_T child2Ptr;
    fprintf(stderr, "tree check is done");
 
    if(oNNode!= NULL) {
@@ -127,8 +127,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
          }
          
          /*child checks*/
-         Node_getChild(oNNode, ulIndex, *child1Ptr);
-         Node_getChild(oNNode, ulIndex + 1, *child2Ptr);
+         Node_getChild(oNNode, ulIndex, child1Ptr);
+         Node_getChild(oNNode, ulIndex + 1, child2Ptr);
 
          fprintf(stderr, "testing");
          if(Path_comparePath(Node_getPath(*child1Ptr),
