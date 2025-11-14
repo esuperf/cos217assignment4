@@ -159,6 +159,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    Node_T child2;
    Node_T *child1Ptr;
    Node_T *child2Ptr;
+   fprintf(stderr, "is valid is done");
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
