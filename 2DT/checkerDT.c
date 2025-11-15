@@ -18,6 +18,10 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPNPath;
    Path_T oPPPath;
 
+   Node_T oNChild1;
+   Node_T oNChild2;
+   int iSuccess;
+
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
       fprintf(stderr, "A node is a NULL pointer\n");
@@ -35,6 +39,26 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          Path_getDepth(oPNPath) - 1) {
          fprintf(stderr, "P-C nodes don't have P-C paths: (%s) (%s)\n",
                  Path_getPathname(oPPPath), Path_getPathname(oPNPath));
+         return FALSE;
+      }
+   }
+
+   ulNumChildren = Node_getNumChildren(oNNode);
+   for (int i = 0; i < ulNumChildren - 1; i++) {
+      iSuccess = Node_getChild(oNNode, i, &oNChild1);
+      if(iStatus != SUCCESS) {
+         fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+         return FALSE;
+      }
+
+      iSuccess = Node_getChild(oNNode, i + 1, &oNChild2);
+      if(iStatus != SUCCESS) {
+         fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
+         return FALSE;
+      }
+
+      if(Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) > 0) {
+         fprintf(stderr, "children must be in lexicographical order\n");
          return FALSE;
       }
    }
@@ -104,7 +128,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    }
 
    if (counter != ulCount) {
-      fprintf(stderr, "ulCount does not match actual node count");
+      fprintf(stderr, "ulCount does not match actual node count\n");
       return FALSE;
    }
 
