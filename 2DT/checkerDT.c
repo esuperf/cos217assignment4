@@ -163,7 +163,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
    /* Now checks invariants recursively at each node from the root. */
-   if (!CheckerDT_treeCheck(oNRoot, &counter)){
+   if (!CheckerDT_treeCheck(oNRoot, counter)){
       return FALSE;
    }
 
