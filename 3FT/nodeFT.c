@@ -24,3 +24,52 @@ struct node {
    void *contents;
 };
 
+/*
+  Links new child oNChild into oNParent's children array at index
+  ulIndex. Returns SUCCESS if the new child was added successfully,
+  or  MEMORY_ERROR if allocation fails adding oNChild to the array.
+*/
+/*new: child cannot be added if oNParent is a file*/
+static int Node_addChild(Node_T oNParent, Node_T oNChild,
+                         size_t ulIndex) {
+   assert(oNParent != NULL);
+   assert(oNChild != NULL);
+
+   if(oNParent->isFile == 0){
+    return NOT_A_DIRECTORY;
+   }
+   if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
+      return SUCCESS;
+   else
+      return MEMORY_ERROR;
+}
+
+/*should be no change from DT*/
+/*
+  Compares the string representation of oNfirst with a string
+  pcSecond representing a node's path.
+  Returns <0, 0, or >0 if oNFirst is "less than", "equal to", or
+  "greater than" pcSecond, respectively.
+*/
+static int Node_compareString(const Node_T oNFirst,
+                                 const char *pcSecond) {
+   assert(oNFirst != NULL);
+   assert(pcSecond != NULL);
+
+   return Path_compareString(oNFirst->oPPath, pcSecond);
+}
+
+/* should be no change from DT*/
+/*
+  Compares the string representation of oNfirst with a string
+  pcSecond representing a node's path.
+  Returns <0, 0, or >0 if oNFirst is "less than", "equal to", or
+  "greater than" pcSecond, respectively.
+*/
+static int Node_compareString(const Node_T oNFirst,
+                                 const char *pcSecond) {
+   assert(oNFirst != NULL);
+   assert(pcSecond != NULL);
+
+   return Path_compareString(oNFirst->oPPath, pcSecond);
+}
