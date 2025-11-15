@@ -23,6 +23,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    int iSuccess;
    size_t ulNumChildren;
    size_t i;
+   size_t j;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -61,6 +62,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
       if(Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) > 0) {
          fprintf(stderr, "children must be in lexicographical order\n");
+         return FALSE;
+      }
+
+      if(Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0) {
+         fprintf(stderr, "children must be unique order\n");
          return FALSE;
       }
    }
