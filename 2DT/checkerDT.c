@@ -21,6 +21,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNChild1;
    Node_T oNChild2;
    int iSuccess;
+   size_t ulNumChildren;
+   size_t i;
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -44,15 +46,15 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    ulNumChildren = Node_getNumChildren(oNNode);
-   for (int i = 0; i < ulNumChildren - 1; i++) {
-      iSuccess = Node_getChild(oNNode, i, &oNChild1);
-      if(iStatus != SUCCESS) {
+   for (i = 1; i < ulNumChildren; i++) {
+      iSuccess = Node_getChild(oNNode, i - 1, &oNChild1);
+      if(iSuccess != SUCCESS) {
          fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
          return FALSE;
       }
 
-      iSuccess = Node_getChild(oNNode, i + 1, &oNChild2);
-      if(iStatus != SUCCESS) {
+      iSuccess = Node_getChild(oNNode, i, &oNChild2);
+      if(iSuccess != SUCCESS) {
          fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
          return FALSE;
       }
