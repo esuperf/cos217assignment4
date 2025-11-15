@@ -147,7 +147,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *counter){
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
    size_t* counter;
-   *counter = 0;
+   size_t zero = 0;
+   counter = &zero;
    /*fprintf(stderr, "is valid is done\n");*/
 
    /* Sample check on a top-level data structure invariant:
