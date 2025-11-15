@@ -146,9 +146,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode){
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
-   size_t* counter;
+   /*size_t* counter;
    size_t zero = 0;
-   counter = &zero;
+   counter = &zero;*/
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
