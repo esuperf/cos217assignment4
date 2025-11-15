@@ -149,7 +149,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    size_t* counter;
    size_t zero = 0;
    counter = &zero;
-   /*fprintf(stderr, "is valid is done\n");*/
+   fprintf(stderr, "%d", *counter);
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
