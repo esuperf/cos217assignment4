@@ -10,15 +10,7 @@
 #include "dynarray.h"
 #include "path.h"
 
-/* static int DynArray_isValid(DynArray_T oDynArray)
-//    {
-//    if (oDynArray->uPhysLength < MIN_PHYS_LENGTH) return 0;
-//    if (oDynArray->uLength > oDynArray->uPhysLength) return 0;
-//    if (oDynArray->ppvArray == NULL) return 0;
-//    return 1;
-//    }
-
- see checkerDT.h for specification */
+ /*see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    /*Node_T oNChild;*/

@@ -145,14 +145,13 @@ the error manifests itself or is "noticed" by the client.
 
       Executable         Function with the underlying error
 ===============================================================
- 24      ./bdtBad1     bdt_client.c, 
- assert(BDT_insert("1root/2child/3grandchild") == INITIALIZATION_ERROR);
+       ./bdtBad1     BDT_insert("1root/2child/3grandchild") 
+ == INITIALIZATION_ERROR;
 ---------------------------------------------------------------
- 143     ./bdtBad2     bdt_client.c,
- assert(!strcmp(temp,"a\na/x\n"));   
+     ./bdtBad2     fails @ !strcmp(temp,"a\na/x\n");
+     -> problem with 
 ---------------------------------------------------------------
- 60       ./bdtBad3     bdt_client.c,
- assert(BDT_contains("1root/2child") == TRUE);  
+     ./bdtBad3    (BDT_contains("1root/2child") == TRUE);  
 ---------------------------------------------------------------
          ./bdtBad4        
 ---------------------------------------------------------------
@@ -163,6 +162,11 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
-
+- Inconsistant parameter order in nodeDT - new has Path before Parent
+while hasChild has Parent before Path
+- Neither DT_rm or DT_destroy free the memory after they remove or destroy 
+parts of the there
+- DT_findNode and DT_traversePath static functions can probably
+be combined
 
 ------------------------------------------------------------------------
