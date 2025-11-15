@@ -169,7 +169,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    
    /*Checks if ulCount is valid*/
-   if (ulCount != counter) {
+   if (ulCount != *counter) {
       fprintf(stderr, "Total node count can't be less than the number of nodes in the tree\n");
       return FALSE;
    }
