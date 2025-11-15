@@ -35,7 +35,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    assert(oNParent != NULL);
    assert(oNChild != NULL);
 
-   if(oNParent->isFile == 0){
+   if(oNParent->isFile == TRUE){
     return NOT_A_DIRECTORY;
    }
    if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
@@ -98,7 +98,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
    
    /*checks if oNParent is a file*/
-   if (oNParent->isFile == 1){
+   if (oNParent->isFile == TRUE){
     return NOT_A_DIRECTORY;
    }
    /* allocate space for a new node */
@@ -118,7 +118,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    psNew->oPPath = oPNewPath;
 
    /* validate and set the new node's parent */
-   if(oNParent != NULL && oNParent->isFile != 1) {
+   if(oNParent != NULL && oNParent->isFile == FALSE) {
       size_t ulSharedDepth;
 
       oPParentPath = oNParent->oPPath;
@@ -241,7 +241,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
    assert(oNParent != NULL);
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
-   assert(oNParent->isFile != 1);
+   assert(oNParent->isFile == FALSE);
 
    /* *pulChildID is the index into oNParent->oDChildren */
    return DynArray_bsearch(oNParent->oDChildren,
@@ -252,7 +252,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
 /*check if file*/
 size_t Node_getNumChildren(Node_T oNParent) {
    assert(oNParent != NULL);
-   assert(oNParent->isFile != 1);
+   assert(oNParent->isFile == FALSE);
    return DynArray_getLength(oNParent->oDChildren);
 }
 
@@ -263,7 +263,7 @@ int  Node_getChild(Node_T oNParent, size_t ulChildID,
    assert(oNParent != NULL);
    assert(poNResult != NULL);
 
-   if(oNParent->isFile == 1){
+   if(oNParent->isFile == TRUE){
     return NOT_A_DIRECTORY;
    }
    /* ulChildID is the index into oNParent->oDChildren */
@@ -303,4 +303,30 @@ char *Node_toString(Node_T oNNode) {
       return NULL;
    else
       return strcpy(copyPath, Path_getPathname(Node_getPath(oNNode)));
+}
+
+/*new function created to check if the Node is a file*/
+boolean Node_isFile(Node_T oNNode) {
+    if (oNNode->isFile == FALSE){
+        return FALSE
+    }
+
+    else return TRUE;
+}
+
+/*new function created to insert contents into a file*/
+void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
+    psNew = malloc(ulLength);
+   if(psNew == NULL) {
+      *pvContents = NULL;
+      return MEMORY_ERROR;
+   }
+   *psNew = *pvContents;
+   oNNode->contents = *psNew;
+   return;
+}
+
+void Node_returnContents(Node_T oNNode){
+    void *nodeContents = oNNode->contents;
+    return nodeContents;
 }
