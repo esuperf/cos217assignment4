@@ -66,7 +66,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
 
       if(Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0) {
-         fprintf(stderr, "children must be unique order\n");
+         fprintf(stderr, "children have unique names\n");
          return FALSE;
       }
    }
