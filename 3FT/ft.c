@@ -412,7 +412,7 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
       ulIndex++;
    }
 
-   
+
 
    Path_free(oPPath);
    /* update DT state variables to reflect insertion */
@@ -482,7 +482,25 @@ int FT_rmFile(const char *pcPath){
   Note: checking for a non-NULL return is not an appropriate
   contains check, because the contents of a file may be NULL.
 */
-void *FT_getFileContents(const char *pcPath);
+/*totally new function; calls helper function; recheck later*/
+void *FT_getFileContents(const char *pcPath){
+    Node_T oNFile = NULL;
+    int iStatus; 
+    void *nodeContents;
+
+    iStatus = FT_findNode(pcPath, oNFile);
+    /*checks if directory*/
+    if (Node_isFile(oNFile) == FALSE){
+        return NULL;
+    }
+    if (iStatus == SUCCESS){
+        Node_returnContents(Node_T oNFile);
+        *nodeContents = oNNode->contents;
+        return nodeContents;
+    }
+
+    return NULL;
+}
 
 /*
   Replaces current contents of the file with absolute path pcPath with
@@ -490,8 +508,26 @@ void *FT_getFileContents(const char *pcPath);
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason.
 */
-void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
-                             size_t ulNewLength);
+void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulNewLength){
+    Node_T oNFile = NULL;
+    int iStatus; 
+    void *nodeContents;
+
+    iStatus = FT_findNode(pcPath, oNFile);
+    /*checks if directory*/
+    if (Node_isFile(oNFile) == FALSE){
+        return NULL;
+    }
+    if (iStatus == SUCCESS){
+        Node_returnContents(Node_T oNFile);
+        *nodeContents = oNNode->contents;
+    }
+
+    /*rewriting without clearing should hopefully work? check later*/
+    Node_insertContents(Node_T oNNode, void *pvNewContents, size_t ulNewLength)
+
+    return nodeContents;
+}
 
 /*
   Returns SUCCESS if pcPath exists in the hierarchy,
@@ -509,6 +545,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 
   When returning another status, *pbIsFile and *pulSize are unchanged.
 */
+/*NOT DONE*/
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
 
 /*
@@ -517,7 +554,20 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
   Returns INITIALIZATION_ERROR if already initialized,
   and SUCCESS otherwise.
 */
-int FT_init(void);
+/*should be no different from DT*/
+int FT_init(void){
+   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+
+   if(bIsInitialized)
+      return INITIALIZATION_ERROR;
+
+   bIsInitialized = TRUE;
+   oNRoot = NULL;
+   ulCount = 0;
+
+   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+   return SUCCESS; 
+}
 
 /*
   Removes all contents of the data structure and
@@ -525,7 +575,23 @@ int FT_init(void);
   Returns INITIALIZATION_ERROR if not already initialized,
   and SUCCESS otherwise.
 */
-int FT_destroy(void);
+/*should also be no different?*/
+int FT_destroy(void){
+    assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+
+   if(!bIsInitialized)
+      return INITIALIZATION_ERROR;
+
+   if(oNRoot) {
+      ulCount -= Node_free(oNRoot);
+      oNRoot = NULL;
+   }
+
+   bIsInitialized = FALSE;
+
+   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+   return SUCCESS;
+}
 
 /*
   Returns a string representation of the
@@ -539,4 +605,5 @@ int FT_destroy(void);
   Allocates memory for the returned string,
   which is then owned by client!
 */
+/*loop through twice!!*/
 char *FT_toString(void);
