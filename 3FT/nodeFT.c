@@ -326,7 +326,21 @@ void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
    return;
 }
 
+/*new function created to return contents of oNNode*/
 void Node_returnContents(Node_T oNNode){
     void *nodeContents = oNNode->contents;
     return nodeContents;
+}
+
+/*new function created to assign a state to the node*/
+void Node_assignFile(Node_T oNNode, boolean STATE){
+   if (STATE == TRUE){
+      oNNode->isFile = TRUE;
+      oNNode->oDChildren = NULL;
+   }
+   if (STATE == FALSE){
+      oNNode->isFile = FALSE;
+      oNNode->contents = NULL;
+   }
+   return;
 }

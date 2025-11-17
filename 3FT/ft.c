@@ -17,13 +17,6 @@
 #include "ft.h"
 
 /*no change*/
-/*Traverses the DT starting at the root as far as possible towards
-  absolute path oPPath. If able to traverse, returns an int SUCCESS
-  status and sets *poNFurthest to the furthest node reached (which may
-  be only a prefix of oPPath, or even NULL if the root is NULL).
-  Otherwise, sets *poNFurthest to NULL and returns with status:
-  * CONFLICTING_PATH if the root's path is not a prefix of oPPath
-  * MEMORY_ERROR if memory could not be allocated to complete request*/
 static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    int iStatus;
    Path_T oPPrefix = NULL;
@@ -88,14 +81,6 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
 }
 
 /*no change*/
-/*Traverses the DT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
-  Otherwise, sets *poNResult to NULL and returns with status:
-  * INITIALIZATION_ERROR if the DT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root's path is not a prefix of pcPath
-  * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
-  * MEMORY_ERROR if memory could not be allocated to complete request*/
 static int FT_findNode(const char *pcPath, Node_T *poNResult) {
    Path_T oPPath = NULL;
    Node_T oNFound = NULL;
@@ -141,16 +126,6 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult) {
 }
 /*--------------------------------------------------------------------*/
 
-
-/*Inserts a new directory into the FT with absolute path pcPath.
-   Returns SUCCESS if the new directory is inserted successfully.
-   Otherwise, returns:
-   * INITIALIZATION_ERROR if the FT is not in an initialized state
-   * BAD_PATH if pcPath does not represent a well-formatted path
-   * CONFLICTING_PATH if the root exists but is not a prefix of pcPath
-   * NOT_A_DIRECTORY if a proper prefix of pcPath exists as a file
-   * ALREADY_IN_TREE if pcPath is already in the FT (as dir or file)
-   * MEMORY_ERROR if memory could not be allocated to complete request*/
 /* same as DT insert except with NOT_A_DIRECTORY option added*/
 int FT_insertDir(const char *pcPath){
    int iStatus;
@@ -254,9 +229,7 @@ int FT_insertDir(const char *pcPath){
 }
 
 
-/*Returns TRUE if the FT contains a directory with absolute path
-  pcPath and FALSE if not or if there is an error while checking.*/
-/*diff is that it needs to check if the found node is a file and\
+/*diff is that it needs to check if the found node is a file and
 if so return FALSE*/
 boolean FT_containsDir(const char *pcPath){
     int iStatus;
@@ -273,15 +246,6 @@ boolean FT_containsDir(const char *pcPath){
 }
 
 
-/*Removes the FT hierarchy (subtree) at the directory with absolute
-  path pcPath. Returns SUCCESS if found and removed.
-  Otherwise, returns:
-  * INITIALIZATION_ERROR if the FT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root exists but is not a prefix of pcPath
-  * NO_SUCH_PATH if absolute path pcPath does not exist in the FT
-  * NOT_A_DIRECTORY if pcPath is in the FT as a file not a directory
-  * MEMORY_ERROR if memory could not be allocated to complete request*/
 /*diff = need to add NOT_A_DIRECTORY*/
 int FT_rmDir(const char *pcPath){
     int iStatus;
@@ -307,21 +271,8 @@ int FT_rmDir(const char *pcPath){
    return SUCCESS;
 }
 
-/*
-   Inserts a new file into the FT with absolute path pcPath, with
-   file contents pvContents of size ulLength bytes.
-   Returns SUCCESS if the new file is inserted successfully.
-   Otherwise, returns:
-   * INITIALIZATION_ERROR if the FT is not in an initialized state
-   * BAD_PATH if pcPath does not represent a well-formatted path
-   * CONFLICTING_PATH if the root exists but is not a prefix of pcPath,
-                      or if the new file would be the FT root
-   * NOT_A_DIRECTORY if a proper prefix of pcPath exists as a file
-   * ALREADY_IN_TREE if pcPath is already in the FT (as dir or file)
-   * MEMORY_ERROR if memory could not be allocated to complete request
-*/
+
 /*diff if that it needs not_a_file(?)*/
-/*UNFINISHED*/
 int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
     int iStatus;
    Path_T oPPath = NULL;
@@ -412,6 +363,11 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
       ulIndex++;
    }
 
+   /*makes sure oNCurr is a node*/
+   Node_assignFile(oNCurr, TRUE);
+
+   /*added to insert the contents at the last node oNNCurr*/
+   Node_insertContents(oNCurr, void *pvContents, size_t ulLength);
 
 
    Path_free(oPPath);
@@ -440,16 +396,6 @@ boolean FT_containsFile(const char *pcPath){
    return (boolean) (iStatus == SUCCESS);
 }
 
-
-/*Removes the FT file with absolute path pcPath.
-  Returns SUCCESS if found and removed.
-  Otherwise, returns:
-  * INITIALIZATION_ERROR if the FT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root exists but is not a prefix of pcPath
-  * NO_SUCH_PATH if absolute path pcPath does not exist in the FT
-  * NOT_A_FILE if pcPath is in the FT as a directory not a file
-  * MEMORY_ERROR if memory could not be allocated to complete request*/
 /*diff = returns NOT_A_FILE*/
 int FT_rmFile(const char *pcPath){
     int iStatus;
@@ -475,13 +421,7 @@ int FT_rmFile(const char *pcPath){
    return SUCCESS;
 }
 
-/*
-  Returns the contents of the file with absolute path pcPath.
-  Returns NULL if unable to complete the request for any reason.
 
-  Note: checking for a non-NULL return is not an appropriate
-  contains check, because the contents of a file may be NULL.
-*/
 /*totally new function; calls helper function; recheck later*/
 void *FT_getFileContents(const char *pcPath){
     Node_T oNFile = NULL;
@@ -545,15 +485,28 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
 
   When returning another status, *pbIsFile and *pulSize are unchanged.
 */
-/*NOT DONE*/
-int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize);
+int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
+   int iStatus;
+   Node_T *findNode;
 
-/*
-  Sets the FT data structure to an initialized state.
-  The data structure is initially empty.
-  Returns INITIALIZATION_ERROR if already initialized,
-  and SUCCESS otherwise.
-*/
+   if(!bIsInitialized){
+      return INITIALIZATION_ERROR;}
+
+   iStatus = FT_findNode(pcPath, findNode);
+   if (iStatus != SUCCESS){
+      return iStatus;
+   }
+
+   if (Node_isFile(findNode) == TRUE){
+      *pbIsFile = TRUE;
+      *pulSize =  sizeof(Node_returnContents(findNode));
+   }
+
+   *pbIsFile = FALSE;
+   
+   return SUCCESS;
+}
+
 /*should be no different from DT*/
 int FT_init(void){
    assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
@@ -569,12 +522,6 @@ int FT_init(void){
    return SUCCESS; 
 }
 
-/*
-  Removes all contents of the data structure and
-  returns it to an uninitialized state.
-  Returns INITIALIZATION_ERROR if not already initialized,
-  and SUCCESS otherwise.
-*/
 /*should also be no different?*/
 int FT_destroy(void){
     assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
@@ -593,17 +540,101 @@ int FT_destroy(void){
    return SUCCESS;
 }
 
-/*
-  Returns a string representation of the
-  data structure, or NULL if the structure is
-  not initialized or there is an allocation error.
 
-  The representation is depth-first with files
-  before directories at any given level, and nodes
-  of the same type ordered lexicographically.
+/* --------------------------------------------------------------------
 
-  Allocates memory for the returned string,
-  which is then owned by client!
+  The following auxiliary functions are used for generating the
+  string representation of the FT.
 */
-/*loop through twice!!*/
-char *FT_toString(void);
+
+/*
+  Performs a pre-order traversal of the tree rooted at n,
+  inserting each payload to DynArray_T d beginning at index i.
+  Returns the next unused index in d after the insertion(s).
+*/
+/*loops twice!!*/
+static size_t FT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
+   size_t c;
+
+   assert(d != NULL);
+
+   if(n != NULL) {
+      (void) DynArray_set(d, i, n);
+      i++;
+      for(c = 0; c < Node_getNumChildren(n); c++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getChild(n,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         if (Node_isFile(oNChild)){
+            i = FT_preOrderTraversal(oNChild, d, i);
+         }
+      }
+      for(c = 0; c < Node_getNumChildren(n); c++) {
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getChild(n,c, &oNChild);
+         assert(iStatus == SUCCESS);
+         if (!Node_isFile(oNChild)){
+            i = FT_preOrderTraversal(oNChild, d, i);
+         }
+      }
+   }
+   return i;
+}
+
+/*
+  Alternate version of strlen that uses pulAcc as an in-out parameter
+  to accumulate a string length, rather than returning the length of
+  oNNode's path, and also always adds one addition byte to the sum.
+*/
+static void FT_strlenAccumulate(Node_T oNNode, size_t *pulAcc) {
+   assert(pulAcc != NULL);
+
+   if(oNNode != NULL)
+      *pulAcc += (Path_getStrLength(Node_getPath(oNNode)) + 1);
+}
+
+/*
+  Alternate version of strcat that inverts the typical argument
+  order, appending oNNode's path onto pcAcc, and also always adds one
+  newline at the end of the concatenated string.
+*/
+static void FT_strcatAccumulate(Node_T oNNode, char *pcAcc) {
+   assert(pcAcc != NULL);
+
+   if(oNNode != NULL) {
+      strcat(pcAcc, Path_getPathname(Node_getPath(oNNode)));
+      strcat(pcAcc, "\n");
+   }
+}
+/*--------------------------------------------------------------------*/
+
+char *FT_toString(void) {
+   DynArray_T nodes;
+   size_t totalStrlen = 1;
+   char *result = NULL;
+
+   if(!bIsInitialized)
+      return NULL;
+
+   nodes = DynArray_new(ulCount);
+   (void) DT_preOrderTraversal(oNRoot, nodes, 0);
+
+   DynArray_map(nodes, (void (*)(void *, void*)) DT_strlenAccumulate,
+                (void*) &totalStrlen);
+
+   result = malloc(totalStrlen);
+   if(result == NULL) {
+      DynArray_free(nodes);
+      return NULL;
+   }
+   *result = '\0';
+
+   DynArray_map(nodes, (void (*)(void *, void*)) DT_strcatAccumulate,
+                (void *) result);
+
+   DynArray_free(nodes);
+
+   return result;
+}

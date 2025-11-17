@@ -13,13 +13,18 @@
 
 
 /* see checkerDT.h for specification */
+/*
+   Returns TRUE if oNNode represents a directory entry
+   in a valid state, or FALSE otherwise. Prints explanation
+   to stderr in the latter case.
+*/
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
 
-   Node_T oNChild1;
-   Node_T oNChild2;
+   Node_T oNChild1 = NULL;
+   Node_T oNChild2 = NULL;
    int iSuccess;
    size_t ulNumChildren;
    size_t i;
@@ -65,8 +70,10 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          return FALSE;
       }
 
+      /*since it passes earlier test then the nonunique children at least have to be next
+      to each other*/
       if(Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0) {
-         fprintf(stderr, "children have unique names\n");
+         fprintf(stderr, "children must have unique names\n");
          return FALSE;
       }
    }
@@ -77,7 +84,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
-   returns TRUE otherwise.
+   returns TRUE otherwise, and increments counter upon
+   every node encountered.
 
    You may want to change this function's return type or
    parameter list to facilitate constructing your checks.
@@ -126,6 +134,10 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    if(!bIsInitialized)
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
+         return FALSE;
+      }
+      if(oNRoot != NULL){
+         fprintf(stderr, "Not initialized, but oNRoot is not null\n");
          return FALSE;
       }
 

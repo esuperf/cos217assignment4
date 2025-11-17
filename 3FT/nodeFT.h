@@ -84,11 +84,22 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond);
 */
 char *Node_toString(Node_T oNNode);
 
+/*Returns a boolean TRUE or FALSE depending on whether the isFile
+field of node oNNode is TRUE or FALSE*/
 boolean Node_isFile(Node_T oNNode);
 
-/*new function created to insert contents into a file*/
+/*New function created to insert contents into a file; sets the contents
+field of oNNode to to have an allocated memory of ulLength bits and
+assigns pvContents to that space. Returns memory-error if allocating
+memory fails; otherwise returns nothing*/
 void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength);
 
+/*Helper function that returns the contents of the contents field
+of node oNNode*/
 void Node_returnContents(Node_T oNNode);
+
+/*Helper function that assigns the isFile field of oNNode to be
+a STATE TRUE or FALSE; returns nothing*/
+void Node_assignFile(Node_T oNNode, boolean STATE);
 
 #endif
