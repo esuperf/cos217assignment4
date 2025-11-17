@@ -8,7 +8,7 @@ clean:
 
 # Dependency rules for file targets
 ft: dynarray.o path.o nodeFT.o ft.o ft_client.o
-	gcc217 dynarray.o path.o nodeFT.o ft.o ft_client.o –o ft
+	gcc217 dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
 dynarray.o: dynarray.c dynarray.h
 	gcc217 -c dynarray.c 
 path.o: path.c dynarray.h path.h a4def.h
