@@ -307,16 +307,16 @@ void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
    
    psNew = malloc(ulLength);
    if(psNew == NULL) {
-      *pvContents = NULL;
+      pvContents = NULL;
       /*return MEMORY_ERROR;*/
    }
-   *psNew = *pvContents;
-   oNNode->contents = *psNew;
+   *psNew = pvContents;
+   oNNode->contents = psNew;
    return;
 }
 
 /*new function created to return contents of oNNode*/
-void Node_returnContents(Node_T oNNode){
+void* Node_returnContents(Node_T oNNode){
     void *nodeContents;
     nodeContents = oNNode->contents;
     return nodeContents;
