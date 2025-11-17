@@ -1,6 +1,6 @@
 # Dependency rules for non-file targets
 
-all: testFT
+all: ft
 clobber: clean 
 	rm -f *~\#*\#
 clean:
