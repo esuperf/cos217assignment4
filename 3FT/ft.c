@@ -154,7 +154,7 @@ int FT_insertDir(const char *pcPath){
       return iStatus;
 
    /* find the closest ancestor of oPPath already in the tree */
-   iStatus= DT_traversePath(oPPath, &oNCurr);
+   iStatus= FT_traversePath(oPPath, &oNCurr);
    if(iStatus != SUCCESS)
    {
       Path_free(oPPath);
@@ -410,7 +410,7 @@ int FT_rmFile(const char *pcPath){
    assert(pcPath != NULL);
    /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
-   iStatus = DT_findNode(pcPath, &oNFound);
+   iStatus = FT_findNode(pcPath, &oNFound);
 
    /*CHANGED added check if this is a directory*/
    if (Node_isFile(oNFound) == FALSE)
@@ -436,12 +436,11 @@ void *FT_getFileContents(const char *pcPath){
 
     iStatus = FT_findNode(pcPath, oNFile);
     /*checks if directory*/
-    if (Node_isFile(oNFile) == FALSE){
+    if (Node_isFile(*oNFile) == FALSE){
         return NULL;
     }
     if (iStatus == SUCCESS){
-        Node_returnContents(oNFile);
-        nodeContents = oNFile->contents;
+        void *nodeContents = Node_returnContents(oNFile);
         return nodeContents;
     }
 
@@ -461,16 +460,15 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
 
     iStatus = FT_findNode(pcPath, oNFile);
     /*checks if directory*/
-    if (Node_isFile(oNFile) == FALSE){
+    if (Node_isFile(*oNFile) == FALSE){
         return NULL;
     }
     if (iStatus == SUCCESS){
-        Node_returnContents(oNFile);
-        *nodeContents = oNFile->contents;
+        void* nodeContents = Node_returnContents(oNFile);
     }
 
     /*rewriting without clearing should hopefully work? check later*/
-    Node_insertContents(oNFile, pvNewContents, ulNewLength);
+    Node_insertContents(*oNFile, pvNewContents, ulNewLength);
 
     return nodeContents;
 }
@@ -505,7 +503,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
 
    if (Node_isFile(*findNode) == TRUE){
       *pbIsFile = TRUE;
-      *pulSize =  sizeof(Node_returnContents(findNode));
+      *pulSize =  sizeof(Node_returnContents(*findNode));
    }
 
    *pbIsFile = FALSE;
