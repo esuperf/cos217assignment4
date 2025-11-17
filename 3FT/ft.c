@@ -16,6 +16,13 @@
 /*#include "checkerDT.h"*/
 #include "ft.h"
 
+/* 1. a flag for being in an initialized state (TRUE) or not (FALSE) */
+static boolean bIsInitialized;
+/* 2. a pointer to the root node in the hierarchy */
+static Node_T oNRoot;
+/* 3. a counter of the number of nodes in the hierarchy */
+static size_t ulCount;
+
 /*no change*/
 static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    int iStatus;
@@ -621,7 +628,7 @@ char *FT_toString(void) {
    nodes = DynArray_new(ulCount);
    (void) DT_preOrderTraversal(oNRoot, nodes, 0);
 
-   DynArray_map(nodes, (void (*)(void *, void*)) DT_strlenAccumulate,
+   DynArray_map(nodes, (void (*)(void *, void*)) FT_strlenAccumulate,
                 (void*) &totalStrlen);
 
    result = malloc(totalStrlen);
@@ -631,7 +638,7 @@ char *FT_toString(void) {
    }
    *result = '\0';
 
-   DynArray_map(nodes, (void (*)(void *, void*)) DT_strcatAccumulate,
+   DynArray_map(nodes, (void (*)(void *, void*)) FT_strcatAccumulate,
                 (void *) result);
 
    DynArray_free(nodes);
