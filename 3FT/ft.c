@@ -107,7 +107,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult) {
       return iStatus;
    }
 
-   iStatus = DT_traversePath(oPPath, &oNFound);
+   iStatus = FT_traversePath(oPPath, &oNFound);
    if(iStatus != SUCCESS)
    {
       Path_free(oPPath);
@@ -162,7 +162,7 @@ int FT_insertDir(const char *pcPath){
    }
 
    /*CHANGED!! checking if the path ends as a file*/
-   if(Node_isFile(oCurr) == TRUE) {
+   if(Node_isFile(oNCurr) == TRUE) {
     Path_free(oPPath);
     return NOT_A_DIRECTORY;
    }
@@ -261,7 +261,7 @@ int FT_rmDir(const char *pcPath){
    assert(pcPath != NULL);
    /*assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));*/
 
-   iStatus = DT_findNode(pcPath, &oNFound);
+   iStatus = FT_findNode(pcPath, &oNFound);
 
    /*CHANGED added check if this is a directory*/
    if (Node_isFile(oNFound) == TRUE)
@@ -308,7 +308,7 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
    }
 
    /*CHANGED!! checking if the path ends as a file*/
-   if(Node_isFile(oCurr) == TRUE) {
+   if(Node_isFile(oNCurr) == TRUE) {
     Path_free(oPPath);
     return NOT_A_DIRECTORY;
    }
@@ -374,8 +374,7 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
    Node_assignFile(oNCurr, TRUE);
 
    /*added to insert the contents at the last node oNNCurr*/
-   Node_insertContents(oNCurr, void *pvContents, size_t ulLength);
-
+   Node_insertContents(oNCurr, pvContents, ulLength);
 
    Path_free(oPPath);
    /* update DT state variables to reflect insertion */
@@ -431,7 +430,7 @@ int FT_rmFile(const char *pcPath){
 
 /*totally new function; calls helper function; recheck later*/
 void *FT_getFileContents(const char *pcPath){
-    Node_T oNFile = NULL;
+    Node_T *oNFile = NULL;
     int iStatus; 
     void *nodeContents;
 
@@ -441,8 +440,8 @@ void *FT_getFileContents(const char *pcPath){
         return NULL;
     }
     if (iStatus == SUCCESS){
-        Node_returnContents(Node_T oNFile);
-        *nodeContents = oNNode->contents;
+        Node_returnContents(oNFile);
+        nodeContents = oNFile->contents;
         return nodeContents;
     }
 
@@ -456,7 +455,7 @@ void *FT_getFileContents(const char *pcPath){
   Returns NULL if unable to complete the request for any reason.
 */
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulNewLength){
-    Node_T oNFile = NULL;
+    Node_T *oNFile = NULL;
     int iStatus; 
     void *nodeContents;
 
@@ -466,12 +465,12 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
         return NULL;
     }
     if (iStatus == SUCCESS){
-        Node_returnContents(Node_T oNFile);
-        *nodeContents = oNNode->contents;
+        Node_returnContents(oNFile);
+        *nodeContents = oNFile->contents;
     }
 
     /*rewriting without clearing should hopefully work? check later*/
-    Node_insertContents(Node_T oNNode, void *pvNewContents, size_t ulNewLength)
+    Node_insertContents(oNFile, pvNewContents, ulNewLength);
 
     return nodeContents;
 }
@@ -504,7 +503,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
       return iStatus;
    }
 
-   if (Node_isFile(findNode) == TRUE){
+   if (Node_isFile(*findNode) == TRUE){
       *pbIsFile = TRUE;
       *pulSize =  sizeof(Node_returnContents(findNode));
    }
@@ -626,7 +625,7 @@ char *FT_toString(void) {
       return NULL;
 
    nodes = DynArray_new(ulCount);
-   (void) DT_preOrderTraversal(oNRoot, nodes, 0);
+   (void) FT_preOrderTraversal(oNRoot, nodes, 0);
 
    DynArray_map(nodes, (void (*)(void *, void*)) FT_strlenAccumulate,
                 (void*) &totalStrlen);
