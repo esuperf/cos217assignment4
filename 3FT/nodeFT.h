@@ -96,7 +96,7 @@ void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength);
 
 /*Helper function that returns the contents of the contents field
 of node oNNode*/
-void Node_returnContents(Node_T oNNode);
+void* Node_returnContents(Node_T oNNode);
 
 /*Helper function that assigns the isFile field of oNNode to be
 a STATE TRUE or FALSE; returns nothing*/

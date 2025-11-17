@@ -303,9 +303,8 @@ boolean Node_isFile(Node_T oNNode) {
 
 /*new function created to insert contents into a file*/
 void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
-   struct node *psNew;
    
-   psNew = malloc(ulLength);
+   void* psNew = malloc(ulLength);
    if(psNew == NULL) {
       pvContents = NULL;
       /*return MEMORY_ERROR;*/
