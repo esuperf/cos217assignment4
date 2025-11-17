@@ -58,20 +58,6 @@ static int Node_compareString(const Node_T oNFirst,
    return Path_compareString(oNFirst->oPPath, pcSecond);
 }
 
-/* should be no change from DT*/
-/*
-  Compares the string representation of oNfirst with a string
-  pcSecond representing a node's path.
-  Returns <0, 0, or >0 if oNFirst is "less than", "equal to", or
-  "greater than" pcSecond, respectively.
-*/
-static int Node_compareString(const Node_T oNFirst,
-                                 const char *pcSecond) {
-   assert(oNFirst != NULL);
-   assert(pcSecond != NULL);
-
-   return Path_compareString(oNFirst->oPPath, pcSecond);
-}
 
 /*
   Creates a new node with path oPPath and parent oNParent.  Returns an
@@ -94,7 +80,7 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    int iStatus;
 
    assert(oPPath != NULL);
-   assert(oNParent == NULL)
+   assert(oNParent == NULL);
    /*|| CheckerDT_Node_isValid(oNParent));*/
    
    /*checks if oNParent is a file*/
@@ -309,7 +295,7 @@ char *Node_toString(Node_T oNNode) {
 /*new function created to check if the Node is a file*/
 boolean Node_isFile(Node_T oNNode) {
     if (oNNode->isFile == FALSE){
-        return FALSE
+        return FALSE;
     }
 
     else return TRUE;
@@ -317,10 +303,12 @@ boolean Node_isFile(Node_T oNNode) {
 
 /*new function created to insert contents into a file*/
 void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
-    psNew = malloc(ulLength);
+   struct node *psNew;
+   
+   psNew = malloc(ulLength);
    if(psNew == NULL) {
       *pvContents = NULL;
-      return MEMORY_ERROR;
+      /*return MEMORY_ERROR;*/
    }
    *psNew = *pvContents;
    oNNode->contents = *psNew;
@@ -329,7 +317,8 @@ void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
 
 /*new function created to return contents of oNNode*/
 void Node_returnContents(Node_T oNNode){
-    void *nodeContents = oNNode->contents;
+    void *nodeContents;
+    nodeContents = oNNode->contents;
     return nodeContents;
 }
 
