@@ -464,7 +464,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
         return NULL;
     }
     if (iStatus == SUCCESS){
-        nodeContents = Node_returnContents(oNFile);
+        nodeContents = Node_returnContents(*oNFile);
     }
 
     /*rewriting without clearing should hopefully work? check later*/
