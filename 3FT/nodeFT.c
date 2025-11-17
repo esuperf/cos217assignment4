@@ -309,7 +309,7 @@ void Node_insertContents(Node_T oNNode, void *pvContents, size_t ulLength){
       pvContents = NULL;
       /*return MEMORY_ERROR;*/
    }
-   *psNew = pvContents;
+   psNew = pvContents;
    oNNode->contents = psNew;
    return;
 }
