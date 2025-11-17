@@ -300,7 +300,7 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength){
       return iStatus;
 
    /* find the closest ancestor of oPPath already in the tree */
-   iStatus= DT_traversePath(oPPath, &oNCurr);
+   iStatus= FT_traversePath(oPPath, &oNCurr);
    if(iStatus != SUCCESS)
    {
       Path_free(oPPath);
@@ -440,7 +440,7 @@ void *FT_getFileContents(const char *pcPath){
         return NULL;
     }
     if (iStatus == SUCCESS){
-        void *nodeContents = Node_returnContents(oNFile);
+        nodeContents = Node_returnContents(*oNFile);
         return nodeContents;
     }
 
@@ -464,7 +464,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
         return NULL;
     }
     if (iStatus == SUCCESS){
-        void* nodeContents = Node_returnContents(oNFile);
+        nodeContents = Node_returnContents(oNFile);
     }
 
     /*rewriting without clearing should hopefully work? check later*/
@@ -491,7 +491,7 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents, size_t ulN
 */
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize){
    int iStatus;
-   Node_T *findNode;
+   Node_T *findNode = NULL;
 
    if(!bIsInitialized){
       return INITIALIZATION_ERROR;}
